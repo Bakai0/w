@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/characterFragment"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="character" />
+
+    <item
+        android:id="@+id/episodeFragment"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:title="location"/>
+
+    <item
+        android:id="@+id/locationFragment"
+        android:icon="@drawable/ic_baseline_cruelty_free_24"
+        android:title="episod"/>
+
+</menu>
