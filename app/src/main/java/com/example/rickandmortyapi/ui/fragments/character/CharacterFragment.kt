@@ -5,44 +5,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.rickandmortyapi.R
 import com.example.rickandmortyapi.databinding.FragmentCharacterBinding
+import com.example.rickandmortyapi.repozitory.base.BaseFragment
 import com.example.rickandmortyapi.ui.adapters.CharacterAdapter
+import kotlinx.coroutines.launch
 
-class CharacterFragment : Fragment() {
+class CharacterFragment:  BaseFragment<FragmentCharacterBinding, CharacterViewModel>(R.layout.fragment_character) {
 
+    override val binding by viewBinding(FragmentCharacterBinding::bind)
+    override val viewModel: CharacterViewModel by activityViewModels()
+    private var characterAdapter = CharacterAdapter(this::onItemClick)
 
-    private var viewModel: CharacterViewModel? = null
-    private lateinit var binding: FragmentCharacterBinding
-    private val characterAdapter = CharacterAdapter()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCharacterBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[CharacterViewModel::class.java]
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initialize()
-        setupObserve()
-    }
-
-    private fun initialize() {
+    override fun initialize() {
         binding.characterRecView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = characterAdapter
-
         }
     }
 
-    private fun setupObserve() {
-        viewModel?.fetchCharacters()?.observe(viewLifecycleOwner) {
-            characterAdapter.setlist(it.result)
+    override fun setupObserve() {
+        lifecycleScope.launch {
+            viewModel.fetchCharacter().collect {
+                characterAdapter.submitData(it)
+            }
         }
+    }
+
+    private fun onItemClick(id: Int) {
+        val action: NavDirections =
+            CharacterFragmentDirections.actionCharacterFragmentToCharacterDetailFragment(id)
+        findNavController().navigate(action)
     }
 }

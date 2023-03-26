@@ -1,23 +1,25 @@
 package com.example.rickandmortyapi.ui.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyapi.databinding.ItemEpisodeBinding
 import com.example.rickandmortyapi.model.EpisodeModel
 
-class EpisodeAdapter: RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
+class EpisodeAdapter(val onItemClick: (id: Int) -> Unit) :
+    PagingDataAdapter<EpisodeModel, EpisodeAdapter.EpisodeViewHolder>(diffUtil) {
 
-    private var listEpisode: List<EpisodeModel> = ArrayList()
-
-    fun setList(list: List<EpisodeModel>) {
-        this.listEpisode = list
-        notifyDataSetChanged()
-    }
-
-    class ViewHolder(private val binding: ItemEpisodeBinding) :
+    inner class EpisodeViewHolder(private val binding: ItemEpisodeBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                getItem(absoluteAdapterPosition)?.let { episode -> onItemClick(episode.id) }
+            }
+        }
+
         fun onBind(episodeModel: EpisodeModel) {
             binding.itemEpisodeEpisode.text = episodeModel.episode
             binding.itemEpisodeAirDate.text = episodeModel.air_date
@@ -29,22 +31,45 @@ class EpisodeAdapter: RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
+        return EpisodeViewHolder(
             ItemEpisodeBinding.inflate(
                 LayoutInflater.from(
-                parent.context
-            ), parent,
-                false)
+                    parent.context
+                ), parent,
+                false
+            )
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(listEpisode[position])
+    override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
+        getItem(position)?.let {
+            holder.onBind(it)
+        }
     }
 
-    override fun getItemCount(): Int = listEpisode.size
-}
+        companion object {
+            private val diffUtil = object : DiffUtil.ItemCallback<EpisodeModel>() {
+                override fun areItemsTheSame(
+                    oldItem: EpisodeModel,
+                    newItem: EpisodeModel
+                ): Boolean {
+                    return oldItem == newItem
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: EpisodeModel,
+                    newItem: EpisodeModel
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
+            }
+        }
+    }
+
+
+
+
 
 
 
