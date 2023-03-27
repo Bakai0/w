@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.rickandmortyapi.R
 import com.example.rickandmortyapi.databinding.FragmentEpisodeBinding
-import com.example.rickandmortyapi.repozitory.base.BaseFragment
+import com.example.rickandmortyapi.base.BaseFragment
 import com.example.rickandmortyapi.ui.adapters.EpisodeAdapter
 import kotlinx.coroutines.launch
 

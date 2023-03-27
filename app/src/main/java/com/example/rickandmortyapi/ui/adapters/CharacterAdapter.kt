@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.rickandmortyapi.databinding.ItemCharacterBinding
 import com.example.rickandmortyapi.exeption.setImage
 import com.example.rickandmortyapi.model.CharacterModel
@@ -61,4 +60,5 @@ class CharacterAdapter(val onItemClick: (id: Int) -> Unit) :
                 return oldItem.id == newItem.id
             }
         }
-    }}
+    }
+}

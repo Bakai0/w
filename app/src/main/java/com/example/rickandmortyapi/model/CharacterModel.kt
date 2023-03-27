@@ -3,6 +3,7 @@ package com.example.rickandmortyapi.model
 import com.google.gson.annotations.SerializedName
 
 data class CharacterModel (
+
   @SerializedName("id")
   val id:Int,
 

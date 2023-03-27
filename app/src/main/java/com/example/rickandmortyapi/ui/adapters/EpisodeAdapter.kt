@@ -25,9 +25,7 @@ class EpisodeAdapter(val onItemClick: (id: Int) -> Unit) :
             binding.itemEpisodeAirDate.text = episodeModel.air_date
             binding.itemEpisodeCreated.text = episodeModel.created
             binding.itemLocationName.text = episodeModel.name
-            {
 
-            }
         }
     }
 

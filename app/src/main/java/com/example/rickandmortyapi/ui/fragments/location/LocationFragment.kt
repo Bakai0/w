@@ -11,9 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.rickandmortyapi.R
 import com.example.rickandmortyapi.databinding.FragmentLocationBinding
-import com.example.rickandmortyapi.repozitory.base.BaseFragment
+import com.example.rickandmortyapi.base.BaseFragment
 import com.example.rickandmortyapi.ui.adapters.LocationAdapter
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,7 @@ class LocationFragment  :
 
 
     override fun initialize() {
-        binding.recyclerLocation.apply {
+        binding.locationRecView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = locationAdapter
         }

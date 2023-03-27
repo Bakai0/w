@@ -3,6 +3,7 @@ package com.example.rickandmortyapi.ui.fragments.location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.rickandmortyapi.App
 import com.example.rickandmortyapi.model.LocationModel
 import com.example.rickandmortyapi.model.RickAndMortyResponce
