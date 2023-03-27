@@ -1,13 +1,10 @@
 package com.example.rickandmortyapi.ui.fragments.episode
 
-import androidx.lifecycle.ViewModelProvider
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +13,7 @@ import com.example.rickandmortyapi.R
 import com.example.rickandmortyapi.databinding.FragmentEpisodeBinding
 import com.example.rickandmortyapi.base.BaseFragment
 import com.example.rickandmortyapi.ui.adapters.EpisodeAdapter
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 class EpisodeFragment :
     BaseFragment<FragmentEpisodeBinding, EpisodeViewModel>(R.layout.fragment_episode) {
@@ -33,10 +30,30 @@ class EpisodeFragment :
     }
 
     override fun setupObserve() {
-        lifecycleScope.launch {
-            viewModel.fetchEpisode().collect {
-                episodeAdapter.submitData(it)
+        if (isOnline()) {
+            viewModel.fetchEpisodes().observe(viewLifecycleOwner) {
+                episodeAdapter.submitList(it.result)
             }
+        } else {
+            viewModel.getAll().observe(viewLifecycleOwner) {
+                episodeAdapter.submitList(it)
+                Toast.makeText(requireContext(), "offline", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun isOnline(): Boolean {
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
         }
     }
 

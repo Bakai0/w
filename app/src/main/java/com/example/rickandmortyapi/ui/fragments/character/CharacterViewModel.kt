@@ -2,18 +2,18 @@ package com.example.rickandmortyapi.ui.fragments.character
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.example.rickandmortyapi.model.CharacterModel
 import com.example.rickandmortyapi.repozitory.CharacterRepozitory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CharacterViewModel : ViewModel() {
+@HiltViewModel
+class CharacterViewModel @Inject constructor(
+    private val characterRepozitory: CharacterRepozitory
+) : ViewModel() {
 
-    private val characterRepository = CharacterRepozitory()
+    fun fetchCharacters() = characterRepozitory.fetchCharacter()
+//        .cachedIn(viewModelScope)
 
-    fun fetchCharacter() = characterRepository.fetchCharacter().cachedIn(viewModelScope)
-
-    fun fetchDetailCharacters(id: Int): MutableLiveData<CharacterModel> {
-        return characterRepository.fetchDetailCharacter(id)
-    }
+    fun getAll() = characterRepozitory.getAll()
 }

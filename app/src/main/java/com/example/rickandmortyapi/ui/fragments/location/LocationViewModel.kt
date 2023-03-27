@@ -2,23 +2,23 @@ package com.example.rickandmortyapi.ui.fragments.location
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import com.example.rickandmortyapi.App
+import com.example.rickandmortyapi.model.EpisodeModel
 import com.example.rickandmortyapi.model.LocationModel
-import com.example.rickandmortyapi.model.RickAndMortyResponce
 import com.example.rickandmortyapi.repozitory.LocationRepozitory
-import retrofit2.Call
-import retrofit2.Response
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LocationViewModel : ViewModel() {
+@HiltViewModel
+class LocationViewModel @Inject constructor(
+    private val locationRepository: LocationRepozitory
+) : ViewModel() {
 
-        private val locationRepository = LocationRepozitory()
+    fun fetchLocations() = locationRepository.fetchLocation()
+//        .cachedIn(viewModelScope)
 
-        fun fetchLocation() = locationRepository.fetchLocation().cachedIn(viewModelScope)
-
-        fun fetchDetailLocation(id: Int): MutableLiveData<LocationModel> {
-            return locationRepository.fetchDetailLocation(id)
-        }
+    fun fetchDetailLocation(id: Int): MutableLiveData<LocationModel> {
+        return locationRepository.fetchDetailLocation(id)
     }
+
+    fun getAll() = locationRepository.getAll()    }
 

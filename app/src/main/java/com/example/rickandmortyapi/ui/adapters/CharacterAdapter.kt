@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyapi.databinding.ItemCharacterBinding
 import com.example.rickandmortyapi.exeption.setImage
 import com.example.rickandmortyapi.model.CharacterModel
 
 class CharacterAdapter(val onItemClick: (id: Int) -> Unit) :
-    PagingDataAdapter<CharacterModel, CharacterAdapter.CharacterViewHolder>(diffUtil) {
+    ListAdapter<CharacterModel, CharacterAdapter.CharacterViewHolder>(diffUtil) {
 
     inner class CharacterViewHolder(private val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -1,10 +1,12 @@
 package com.example.rickandmortyapi.model
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class EpisodeModel(
 
     @SerializedName("id")
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
 
     @SerializedName("name")

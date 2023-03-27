@@ -1,13 +1,10 @@
 package com.example.rickandmortyapi.ui.fragments.location
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +13,6 @@ import com.example.rickandmortyapi.R
 import com.example.rickandmortyapi.databinding.FragmentLocationBinding
 import com.example.rickandmortyapi.base.BaseFragment
 import com.example.rickandmortyapi.ui.adapters.LocationAdapter
-import kotlinx.coroutines.launch
 
 class LocationFragment  :
     BaseFragment<FragmentLocationBinding, LocationViewModel>(R.layout.fragment_location) {
@@ -34,10 +30,30 @@ class LocationFragment  :
     }
 
     override fun setupObserve() {
-        lifecycleScope.launch {
-            viewModel.fetchLocation().collect {
-                locationAdapter.submitData(it)
+        if (isOnline()){
+            viewModel.fetchLocations().observe(viewLifecycleOwner) {
+                locationAdapter.submitList(it.result)
             }
+        } else {
+            viewModel.getAll().observe(viewLifecycleOwner){
+                locationAdapter.submitList(it)
+                Toast.makeText(requireContext(), "offline", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun isOnline(): Boolean {
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
         }
     }
 

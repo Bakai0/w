@@ -1,11 +1,13 @@
 package com.example.rickandmortyapi.model
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class CharacterModel (
 
   @SerializedName("id")
-  val id:Int,
+  @PrimaryKey(autoGenerate = true)
+  val id: Int,
 
   @SerializedName("name")
   val name: String,
@@ -17,5 +19,8 @@ data class CharacterModel (
   val status: String,
 
   @SerializedName("gender")
-  val gender: String
+  val gender: String,
+
+  @SerializedName("origin")
+  val origin: Any
   )

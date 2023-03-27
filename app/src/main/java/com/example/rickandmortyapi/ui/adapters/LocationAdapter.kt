@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmortyapi.databinding.ItemLocationBinding
 import com.example.rickandmortyapi.model.LocationModel
 
 class LocationAdapter(val onItemClick: (id: Int) -> Unit) :
-    PagingDataAdapter<LocationModel, LocationAdapter.LocationViewHolder>(diffUtil) {
+    ListAdapter<LocationModel, LocationAdapter.LocationViewHolder>(diffUtil) {
 
     inner class LocationViewHolder(private val binding: ItemLocationBinding) :
         RecyclerView.ViewHolder(binding.root) {
